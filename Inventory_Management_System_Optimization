@@ -1,0 +1,128 @@
+# Define product class
+class Product:
+  def __init__(self, id, name, cost, supplier, lead_time):
+    self.id = id
+    self.name = name
+    self.cost = cost
+    self.supplier = supplier
+    self.lead_time = lead_time  # Days for order fulfillment
+    self.stock = {}  # Dictionary with warehouse IDs and stock levels
+
+# Define warehouse class
+class Warehouse:
+  def __init__(self, id, location, capacity):
+    self.id = id
+    self.location = location
+    self.capacity = capacity
+
+# Function to invest in a product (add to inventory)
+def invest_in_product(product_id, warehouse_id, quantity):
+  products.get(product_id).stock[warehouse_id] = products.get(product_id).stock.get(warehouse_id, 0) + quantity
+
+# Function to gather sales data (placeholder, replace with actual data collection)
+def gather_sales_data(product_id, period="week"):
+  # Simulate fetching data from sales system
+  sales_data = {
+      1: {"week": 10, "month": 40},  # Replace with actual sales data
+      2: {"week": 5, "month": 20}
+  }
+  return sales_data.get(product_id, {})[period]
+
+# Function to calculate optimal order quantity (EOQ)
+def calculate_eoq(product_id, warehouse_id, demand):
+  # Implement EOQ formula (average daily demand * lead time * sqrt(2 * setup cost / holding cost))
+  # Replace with actual calculation considering setup and holding costs
+  return demand * products[product_id].lead_time * 2**0.5  # Placeholder formula
+
+# Function to generate inventory order
+def generate_order(product_id, warehouse_id):
+  # Check stock level and reorder point
+  stock_level = products[product_id].stock.get(warehouse_id, 0)
+  reorder_point = calculate_reorder_point(product_id, warehouse_id)
+  if stock_level <= reorder_point:
+    order_quantity = calculate_eoq(product_id, warehouse_id, get_demand(product_id, "week"))
+    print(f"Order generated for product {product_id} (warehouse {warehouse_id}): {order_quantity} units")
+  else:
+    print(f"Product {product_id} (warehouse {warehouse_id}) has sufficient stock ({stock_level})")
+
+# Function to calculate reorder point (placeholder, replace with your strategy)
+def calculate_reorder_point(product_id, warehouse_id):
+  # Implement reorder point calculation based on safety stock and lead time demand
+  return get_demand(product_id, "week") * products[product_id].lead_time + 10  # Placeholder example
+
+# Function to get demand data (replace with actual historical data access)
+def get_demand(product_id, period="week"):
+  return gather_sales_data(product_id, period)
+
+# Function to generate reports (placeholder, replace with desired reports)
+def generate_reports():
+  # Implement report generation for turnover rate, stockouts, and overstock costs
+  print("Inventory Turnover Rate (placeholder report)")
+  print("Stockout Report (placeholder report)")
+  print("Overstock Cost Report (placeholder report)")
+
+# User interaction (basic example, replace with UI framework)
+def user_interaction():
+  while True:
+    choice = input("Choose an action (i - invest, g - gather data, o - order, r - reports, q - quit): ")
+    if choice == 'i':
+      product_id = int(input("Enter product ID: "))
+      warehouse_id = int(input("Enter warehouse ID: "))
+      quantity = int(input("Enter quantity to invest: "))
+      invest_in_product(product_id, warehouse_id, quantity)
+    elif choice == 'g':
+      product_id = int(input("Enter product ID: "))
+      period = input("Enter period (week/month): ")
+      sales_data = gather_sales_data(product_id, period)
+      print(f"Sales data for product {product_id} ({period}): {sales_data}")
+    elif choice == 'o':
+      product_id = int(input("Enter product ID: "))
+      warehouse_id
+      # Continued user interaction with error handling and order generation call
+
+def user_interaction():
+  while True:
+    choice = input("Choose an action (i - invest, g - gather data, o - order, r - reports, q - quit): ")
+    if choice == 'i':
+      try:
+        product_id = int(input("Enter product ID: "))
+        warehouse_id = int(input("Enter warehouse ID: "))
+        quantity = int(input("Enter quantity to invest: "))
+        invest_in_product(product_id, warehouse_id, quantity)
+        print(f"Invested {quantity} units of product {product_id} in warehouse {warehouse_id}")
+      except ValueError:
+        print("Invalid input. Please enter integers for product ID, warehouse ID, and quantity.")
+    elif choice == 'g':
+      try:
+        product_id = int(input("Enter product ID: "))
+        period = input("Enter period (week/month): ")
+        sales_data = gather_sales_data(product_id, period)
+        print(f"Sales data for product {product_id} ({period}): {sales_data}")
+      except ValueError:
+        print("Invalid input. Please enter an integer for product ID.")
+    elif choice == 'o':
+      try:
+        product_id = int(input("Enter product ID: "))
+        warehouse_id = int(input("Enter warehouse ID: "))
+        generate_order(product_id, warehouse_id)
+      except ValueError:
+        print("Invalid input. Please enter integers for product ID and warehouse ID.")
+    elif choice == 'r':
+      generate_reports()
+    elif choice == 'q':
+      print("Exiting inventory management system")
+      break
+    else:
+      print("Invalid choice. Please try again.")
+
+# Main execution block
+products = {}  # Dictionary to store product objects
+warehouses = {}  # Dictionary to store warehouse objects
+
+# Sample product and warehouse data (replace with actual data loading)
+products[1] = Product(1, "Shirt", 10, "Supplier A", 5)
+products[2] = Product(2, "Pants", 15, "Supplier B", 7)
+warehouses[1] = Warehouse(1, "Warehouse A", 100)
+warehouses[2] = Warehouse(2, "Warehouse B", 50)
+
+user_interaction()
